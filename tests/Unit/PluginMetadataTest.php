@@ -9,7 +9,11 @@ use DOMElement;
 use DOMXPath;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Plugin;
+use Shopware\Core\System\SystemConfig\Util\ConfigReader;
 use Skyyware\SkyyAddressValidation\SkyyAddressValidation;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class PluginMetadataTest extends TestCase
 {
@@ -84,7 +88,7 @@ final class PluginMetadataTest extends TestCase
         self::assertSame('>=8.2', $composer['require']['php'] ?? null);
         self::assertSame('~6.6.0 || ~6.7.0', $composer['require']['shopware/core'] ?? null);
         self::assertSame('~6.6.0 || ~6.7.0', $composer['require']['shopware/storefront'] ?? null);
-        self::assertSame('^6.4 || ^7.2', $composer['require']['symfony/http-client'] ?? null);
+        self::assertSame('^6.4 || ^7.0', $composer['require']['symfony/http-client'] ?? null);
         self::assertSame(
             'src/',
             $composer['autoload']['psr-4']['Skyyware\\SkyyAddressValidation\\'] ?? null,
@@ -111,12 +115,18 @@ final class PluginMetadataTest extends TestCase
             $extra['description'] ?? null,
         );
 
-        $skyywareLinks = [
+        $manufacturerLinks = [
             'de-DE' => 'https://www.skyyware.com/de',
             'en-GB' => 'https://www.skyyware.com/',
         ];
-        self::assertSame($skyywareLinks, $extra['manufacturerLink'] ?? null);
-        self::assertSame($skyywareLinks, $extra['supportLink'] ?? null);
+        self::assertSame($manufacturerLinks, $extra['manufacturerLink'] ?? null);
+        self::assertSame(
+            [
+                'de-DE' => 'https://www.skyyware.com/contact/',
+                'en-GB' => 'https://www.skyyware.com/contact/',
+            ],
+            $extra['supportLink'] ?? null,
+        );
     }
 
     public function testPluginClassIsAutoloadable(): void
@@ -128,6 +138,13 @@ final class PluginMetadataTest extends TestCase
         self::assertIsString($pluginClass);
         self::assertTrue(class_exists($pluginClass));
         self::assertTrue(is_subclass_of($pluginClass, Plugin::class));
+    }
+
+    public function testReadmeContainsNoInternalProvenanceLanguage(): void
+    {
+        $readme = file_get_contents(self::ROOT . '/README.md');
+        self::assertIsString($readme);
+        self::assertDoesNotMatchRegularExpression('/\b(?:clean[- ]room|provenance)\b/i', $readme);
     }
 
     public function testRepositoryContainsTheMitLicense(): void
@@ -152,6 +169,29 @@ final class PluginMetadataTest extends TestCase
         self::assertSame(512, $image[0]);
         self::assertSame(512, $image[1]);
         self::assertSame('image/png', $image['mime']);
+    }
+
+    public function testShopwareConfigReaderValidatesAndParsesGlobalConfiguration(): void
+    {
+        $configPath = self::ROOT . '/src/Resources/config/config.xml';
+        self::assertFileExists($configPath);
+
+        $config = (new ConfigReader())->read($configPath);
+
+        self::assertCount(2, $config);
+    }
+
+    public function testSymfonyContainerLoadsAndCompilesServiceConfiguration(): void
+    {
+        $configDirectory = self::ROOT . '/src/Resources/config';
+        self::assertFileExists($configDirectory . '/services.xml');
+
+        $container = new ContainerBuilder();
+        $loader = new XmlFileLoader($container, new FileLocator($configDirectory));
+        $loader->load('services.xml');
+        $container->compile();
+
+        self::assertTrue($container->isCompiled());
     }
 
     public function testGlobalConfigurationIsTranslatedAndPrivacySafeByDefault(): void

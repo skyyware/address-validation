@@ -23,7 +23,7 @@
     "php": ">=8.2",
     "shopware/core": "~6.6.0 || ~6.7.0",
     "shopware/storefront": "~6.6.0 || ~6.7.0",
-    "symfony/http-client": "^6.4 || ^7.2"
+    "symfony/http-client": "^6.4 || ^7.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.75",
@@ -55,8 +55,8 @@
       "en-GB": "https://www.skyyware.com/"
     },
     "supportLink": {
-      "de-DE": "https://www.skyyware.com/de",
-      "en-GB": "https://www.skyyware.com/"
+      "de-DE": "https://www.skyyware.com/contact/",
+      "en-GB": "https://www.skyyware.com/contact/"
     }
   },
   "config": {

@@ -1,7 +1,7 @@
 # SkyyAddressValidation
 
-SkyyAddressValidation is a clean-room, MIT-licensed Shopware 6 plugin for
-international customer input checks and optional remote address verification.
+SkyyAddressValidation is an MIT-licensed Shopware 6 plugin for international
+customer input checks and optional remote address verification.
 It supports Shopware 6.6 and 6.7 on PHP 8.2 or newer.
 
 ## Safe Defaults

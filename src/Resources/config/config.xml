@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+  <card>
+    <title>Local validation</title>
+    <title lang="de-DE">Lokale Validierung</title>
+
+    <input-field type="bool">
+      <name>validateNames</name>
+      <label>Reject digits in names</label>
+      <label lang="de-DE">Ziffern in Namen ablehnen</label>
+      <helpText>Keep international name characters while rejecting digits.</helpText>
+      <helpText lang="de-DE">Internationale Namenszeichen beibehalten und Ziffern ablehnen.</helpText>
+      <defaultValue>true</defaultValue>
+    </input-field>
+
+    <input-field type="bool">
+      <name>validatePhoneNumbers</name>
+      <label>Validate telephone characters</label>
+      <label lang="de-DE">Telefonzeichen prüfen</label>
+      <helpText>Reject letters and control characters without claiming that a number exists.</helpText>
+      <helpText lang="de-DE">Buchstaben und Steuerzeichen ablehnen, ohne die Existenz einer Nummer zu bestätigen.</helpText>
+      <defaultValue>true</defaultValue>
+    </input-field>
+
+    <input-field type="bool">
+      <name>validatePostalCodes</name>
+      <label>Validate postal code characters</label>
+      <label lang="de-DE">Postleitzahlenzeichen prüfen</label>
+      <helpText>Allow international postal formats while rejecting control characters.</helpText>
+      <helpText lang="de-DE">Internationale Postleitzahlenformate erlauben und Steuerzeichen ablehnen.</helpText>
+      <defaultValue>true</defaultValue>
+    </input-field>
+  </card>
+
+  <card>
+    <title>Remote address verification</title>
+    <title lang="de-DE">Externe Adressprüfung</title>
+
+    <input-field type="bool">
+      <name>providerEnabled</name>
+      <label>Enable remote address verification</label>
+      <label lang="de-DE">Externe Adressprüfung aktivieren</label>
+      <helpText>Disabled by default. Configure a suitable provider before enabling.</helpText>
+      <helpText lang="de-DE">Standardmäßig deaktiviert. Vor der Aktivierung einen geeigneten Provider konfigurieren.</helpText>
+      <defaultValue>false</defaultValue>
+    </input-field>
+
+    <input-field type="url">
+      <name>providerEndpoint</name>
+      <label>Provider endpoint (HTTPS)</label>
+      <label lang="de-DE">Provider-Endpunkt (HTTPS)</label>
+      <helpText>Enter a merchant-controlled or contracted HTTPS endpoint. No public endpoint is preconfigured.</helpText>
+      <helpText lang="de-DE">Einen selbst betriebenen oder vertraglich genutzten HTTPS-Endpunkt eintragen. Es ist kein öffentlicher Endpunkt vorkonfiguriert.</helpText>
+      <defaultValue/>
+    </input-field>
+
+    <input-field type="text">
+      <name>providerUserAgent</name>
+      <label>Provider user agent</label>
+      <label lang="de-DE">Provider-User-Agent</label>
+      <helpText>Use an identifying user agent approved for the configured provider.</helpText>
+      <helpText lang="de-DE">Einen identifizierenden und vom konfigurierten Provider zugelassenen User-Agent verwenden.</helpText>
+      <defaultValue/>
+    </input-field>
+
+    <input-field type="text">
+      <name>providerContactEmail</name>
+      <label>Merchant contact email</label>
+      <label lang="de-DE">Kontakt-E-Mail des Händlers</label>
+      <helpText>Provide the merchant contact required by the configured provider.</helpText>
+      <helpText lang="de-DE">Den vom konfigurierten Provider geforderten Händlerkontakt angeben.</helpText>
+      <defaultValue/>
+    </input-field>
+
+    <input-field type="bool">
+      <name>normalizeAddresses</name>
+      <label>Apply provider normalization</label>
+      <label lang="de-DE">Provider-Normalisierung anwenden</label>
+      <helpText>Keep the submitted address unchanged unless normalization is explicitly enabled.</helpText>
+      <helpText lang="de-DE">Die eingegebene Adresse unverändert lassen, solange die Normalisierung nicht ausdrücklich aktiviert ist.</helpText>
+      <defaultValue>false</defaultValue>
+    </input-field>
+  </card>
+</config>

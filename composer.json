@@ -1,0 +1,70 @@
+{
+  "name": "skyyware/address-validation",
+  "description": "Server-side international input checks and optional address verification for Shopware 6.",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "homepage": "https://www.skyyware.com/",
+  "keywords": [
+    "address",
+    "shopware",
+    "validation"
+  ],
+  "authors": [
+    {
+      "name": "Skyyware",
+      "homepage": "https://www.skyyware.com/"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/skyyware/address-validation/issues",
+    "source": "https://github.com/skyyware/address-validation"
+  },
+  "require": {
+    "php": ">=8.2",
+    "shopware/core": "~6.6.0 || ~6.7.0",
+    "shopware/storefront": "~6.6.0 || ~6.7.0",
+    "symfony/http-client": "^6.4 || ^7.2"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.75",
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^10.5 || ^11.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Skyyware\\SkyyAddressValidation\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Skyyware\\SkyyAddressValidation\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Skyyware\\SkyyAddressValidation\\SkyyAddressValidation",
+    "label": {
+      "de-DE": "Skyy Adressvalidierung",
+      "en-GB": "Skyy Address Validation"
+    },
+    "description": {
+      "de-DE": "Serverseitige internationale Eingabe- und optionale Adressprüfung.",
+      "en-GB": "Server-side international input checks and optional address verification."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://www.skyyware.com/de",
+      "en-GB": "https://www.skyyware.com/"
+    },
+    "supportLink": {
+      "de-DE": "https://www.skyyware.com/de",
+      "en-GB": "https://www.skyyware.com/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "symfony/flex": true,
+      "symfony/runtime": true
+    },
+    "sort-packages": true
+  }
+}

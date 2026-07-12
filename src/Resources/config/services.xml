@@ -4,5 +4,33 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
   <services>
     <defaults autowire="true" autoconfigure="true" public="false"/>
+
+    <service id="Skyyware\SkyyAddressValidation\Config\AddressValidationConfig">
+      <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+    </service>
+
+    <service id="Skyyware\SkyyAddressValidation\Provider\NominatimCompatibleProvider">
+      <argument type="service" id="http_client"/>
+      <argument type="service" id="Skyyware\SkyyAddressValidation\Config\AddressValidationConfig"/>
+      <argument type="service" id="logger"/>
+    </service>
+
+    <service id="Skyyware\SkyyAddressValidation\Provider\ProviderRequestGate">
+      <argument type="service" id="lock.factory"/>
+      <argument type="service" id="cache.object"/>
+    </service>
+
+    <service id="Skyyware\SkyyAddressValidation\Provider\GatedAddressProvider">
+      <argument type="service" id="Skyyware\SkyyAddressValidation\Provider\NominatimCompatibleProvider"/>
+      <argument type="service" id="Skyyware\SkyyAddressValidation\Provider\ProviderRequestGate"/>
+    </service>
+
+    <service id="Skyyware\SkyyAddressValidation\Provider\CachedAddressProvider">
+      <argument type="service" id="Skyyware\SkyyAddressValidation\Provider\GatedAddressProvider"/>
+      <argument type="service" id="cache.object"/>
+    </service>
+
+    <service id="Skyyware\SkyyAddressValidation\Provider\AddressProviderInterface"
+             alias="Skyyware\SkyyAddressValidation\Provider\CachedAddressProvider"/>
   </services>
 </container>

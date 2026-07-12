@@ -10,6 +10,8 @@ use DOMXPath;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\System\SystemConfig\Util\ConfigReader;
+use Skyyware\SkyyAddressValidation\Provider\AddressProviderInterface;
+use Skyyware\SkyyAddressValidation\Provider\CachedAddressProvider;
 use Skyyware\SkyyAddressValidation\SkyyAddressValidation;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -86,9 +88,12 @@ final class PluginMetadataTest extends TestCase
         self::assertArrayNotHasKey('version', $composer);
 
         self::assertSame('>=8.2', $composer['require']['php'] ?? null);
+        self::assertSame('^3.0', $composer['require']['psr/cache'] ?? null);
+        self::assertSame('^3.0', $composer['require']['psr/log'] ?? null);
         self::assertSame('~6.6.0 || ~6.7.0', $composer['require']['shopware/core'] ?? null);
         self::assertSame('~6.6.0 || ~6.7.0', $composer['require']['shopware/storefront'] ?? null);
         self::assertSame('^6.4 || ^7.0', $composer['require']['symfony/http-client'] ?? null);
+        self::assertSame('^6.4 || ^7.0', $composer['require']['symfony/lock'] ?? null);
         self::assertSame(
             'src/',
             $composer['autoload']['psr-4']['Skyyware\\SkyyAddressValidation\\'] ?? null,
@@ -187,8 +192,22 @@ final class PluginMetadataTest extends TestCase
         self::assertFileExists($configDirectory . '/services.xml');
 
         $container = new ContainerBuilder();
+        foreach ([
+            'Shopware\\Core\\System\\SystemConfig\\SystemConfigService',
+            'cache.object',
+            'http_client',
+            'lock.factory',
+            'logger',
+        ] as $serviceId) {
+            $container->register($serviceId)->setSynthetic(true)->setPublic(true);
+        }
         $loader = new XmlFileLoader($container, new FileLocator($configDirectory));
         $loader->load('services.xml');
+        self::assertTrue($container->hasAlias(AddressProviderInterface::class));
+        self::assertSame(
+            CachedAddressProvider::class,
+            (string) $container->getAlias(AddressProviderInterface::class),
+        );
         $container->compile();
 
         self::assertTrue($container->isCompiled());

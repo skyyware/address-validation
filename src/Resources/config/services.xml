@@ -32,5 +32,18 @@
 
     <service id="Skyyware\SkyyAddressValidation\Provider\AddressProviderInterface"
              alias="Skyyware\SkyyAddressValidation\Provider\CachedAddressProvider"/>
+
+    <service id="Skyyware\SkyyAddressValidation\Service\RemoteAddressValidationService">
+      <argument type="service" id="Skyyware\SkyyAddressValidation\Provider\AddressProviderInterface"/>
+      <argument type="service" id="Skyyware\SkyyAddressValidation\Config\AddressValidationConfig"/>
+      <argument type="service" id="country.repository"/>
+      <argument type="service" id="logger"/>
+    </service>
+
+    <service id="Skyyware\SkyyAddressValidation\Subscriber\AddressValidationSubscriber">
+      <argument type="service" id="Skyyware\SkyyAddressValidation\Config\AddressValidationConfig"/>
+      <argument type="service" id="Skyyware\SkyyAddressValidation\Service\RemoteAddressValidationService"/>
+      <tag name="kernel.event_subscriber"/>
+    </service>
   </services>
 </container>

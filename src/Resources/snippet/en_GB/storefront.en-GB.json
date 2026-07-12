@@ -1,0 +1,6 @@
+{
+  "VIOLATION::SKYY_NAME_DIGITS": "Names cannot contain digits.",
+  "VIOLATION::SKYY_PHONE_CHARACTERS": "Use only digits and standard separators in the telephone number.",
+  "VIOLATION::SKYY_POSTAL_CHARACTERS": "Enter a valid postal code.",
+  "VIOLATION::SKYY_ADDRESS_NOT_VERIFIED": "We could not confirm this address. Check the street, city and postal code."
+}

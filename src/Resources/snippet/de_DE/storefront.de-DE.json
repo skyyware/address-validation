@@ -1,0 +1,6 @@
+{
+  "VIOLATION::SKYY_NAME_DIGITS": "Namen dürfen keine Ziffern enthalten.",
+  "VIOLATION::SKYY_PHONE_CHARACTERS": "Bitte verwenden Sie in der Telefonnummer nur Ziffern und übliche Trennzeichen.",
+  "VIOLATION::SKYY_POSTAL_CHARACTERS": "Bitte geben Sie eine gültige Postleitzahl ein.",
+  "VIOLATION::SKYY_ADDRESS_NOT_VERIFIED": "Wir konnten diese Adresse nicht eindeutig bestätigen. Bitte prüfen Sie Straße, Ort und Postleitzahl."
+}

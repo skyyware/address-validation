@@ -195,6 +195,7 @@ final class PluginMetadataTest extends TestCase
         foreach ([
             'Shopware\\Core\\System\\SystemConfig\\SystemConfigService',
             'cache.object',
+            'country.repository',
             'http_client',
             'lock.factory',
             'logger',
@@ -211,6 +212,28 @@ final class PluginMetadataTest extends TestCase
         $container->compile();
 
         self::assertTrue($container->isCompiled());
+    }
+
+    public function testStorefrontSnippetsAreValidAndComplete(): void
+    {
+        $expectedKeys = [
+            'VIOLATION::SKYY_NAME_DIGITS',
+            'VIOLATION::SKYY_PHONE_CHARACTERS',
+            'VIOLATION::SKYY_POSTAL_CHARACTERS',
+            'VIOLATION::SKYY_ADDRESS_NOT_VERIFIED',
+        ];
+
+        foreach ([
+            self::ROOT . '/src/Resources/snippet/de_DE/storefront.de-DE.json',
+            self::ROOT . '/src/Resources/snippet/en_GB/storefront.en-GB.json',
+        ] as $snippetPath) {
+            $snippets = $this->decodeJsonFile($snippetPath);
+            self::assertSame($expectedKeys, array_keys($snippets));
+            foreach ($snippets as $message) {
+                self::assertIsString($message);
+                self::assertNotSame('', trim($message));
+            }
+        }
     }
 
     public function testGlobalConfigurationIsTranslatedAndPrivacySafeByDefault(): void

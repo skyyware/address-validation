@@ -20,7 +20,7 @@ final readonly class AddressValidationConfig
      */
     public function providerConfiguration(): ?array
     {
-        if (!$this->systemConfig->getBool(self::PREFIX . 'providerEnabled')) {
+        if (!$this->isProviderEnabled()) {
             return null;
         }
 
@@ -41,6 +41,11 @@ final readonly class AddressValidationConfig
             'userAgent' => $userAgent,
             'contactEmail' => $contactEmail,
         ];
+    }
+
+    public function isProviderEnabled(): bool
+    {
+        return $this->systemConfig->getBool(self::PREFIX . 'providerEnabled');
     }
 
     public function shouldValidateNames(): bool

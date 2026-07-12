@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Skyyware\SkyyAddressValidation\Provider;
 
+use Psr\Cache\CacheException;
 use Psr\Cache\CacheItemPoolInterface;
 
 final readonly class CachedAddressProvider implements AddressProviderInterface
@@ -22,18 +23,26 @@ final readonly class CachedAddressProvider implements AddressProviderInterface
 
     public function verify(Address $address): ProviderResult
     {
-        $item = $this->cache->getItem($this->cacheKey($address));
-        if ($item->isHit()) {
-            $cached = $this->decode($item->get());
-            if ($cached !== null) {
-                return $cached;
+        try {
+            $item = $this->cache->getItem($this->cacheKey($address));
+            if ($item->isHit()) {
+                $cached = $this->decode($item->get());
+                if ($cached !== null) {
+                    return $cached;
+                }
             }
+        } catch (CacheException) {
+            return $this->inner->verify($address);
         }
 
         $result = $this->inner->verify($address);
-        $item->set($this->encode($result));
-        $item->expiresAfter($result->isUnavailable() ? self::UNAVAILABLE_TTL : self::LONG_TTL);
-        $this->cache->save($item);
+        try {
+            $item->set($this->encode($result));
+            $item->expiresAfter($result->isUnavailable() ? self::UNAVAILABLE_TTL : self::LONG_TTL);
+            $this->cache->save($item);
+        } catch (CacheException) {
+            // Verification results remain usable when the optional cache is unavailable.
+        }
 
         return $result;
     }

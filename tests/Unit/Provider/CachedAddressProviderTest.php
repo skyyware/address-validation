@@ -7,6 +7,10 @@ namespace Skyyware\SkyyAddressValidation\Tests\Unit\Provider;
 use Closure;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheException;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use RuntimeException;
 use Skyyware\SkyyAddressValidation\Provider\Address;
 use Skyyware\SkyyAddressValidation\Provider\AddressProviderInterface;
 use Skyyware\SkyyAddressValidation\Provider\CachedAddressProvider;
@@ -103,6 +107,39 @@ final class CachedAddressProviderTest extends TestCase
         self::assertSame(2, $inner->calls);
     }
 
+    public function testCacheReadFailureFallsBackToInnerProvider(): void
+    {
+        $cache = $this->createMock(CacheItemPoolInterface::class);
+        $cache->method('getItem')->willThrowException(new CacheBackendFailure());
+        $inner = new CallbackAddressProvider(
+            static fn (Address $address): ProviderResult => ProviderResult::verified($address),
+        );
+
+        $result = (new CachedAddressProvider($inner, $cache))->verify($this->address());
+
+        self::assertTrue($result->isVerified());
+        self::assertSame(1, $inner->calls);
+    }
+
+    public function testCacheWriteFailureDoesNotDiscardProviderResult(): void
+    {
+        $item = $this->createMock(CacheItemInterface::class);
+        $item->method('isHit')->willReturn(false);
+        $item->method('set')->willReturnSelf();
+        $item->method('expiresAfter')->willReturnSelf();
+        $cache = $this->createMock(CacheItemPoolInterface::class);
+        $cache->method('getItem')->willReturn($item);
+        $cache->method('save')->willThrowException(new CacheBackendFailure());
+        $inner = new CallbackAddressProvider(
+            static fn (Address $address): ProviderResult => ProviderResult::verified($address),
+        );
+
+        $result = (new CachedAddressProvider($inner, $cache))->verify($this->address());
+
+        self::assertTrue($result->isVerified());
+        self::assertSame(1, $inner->calls);
+    }
+
     /**
      * @return iterable<string, array{ProviderResult}>
      */
@@ -118,6 +155,10 @@ final class CachedAddressProviderTest extends TestCase
     {
         return new Address('Main Street 1', 'Berlin', '10115', 'DE');
     }
+}
+
+final class CacheBackendFailure extends RuntimeException implements CacheException
+{
 }
 
 final class CallbackAddressProvider implements AddressProviderInterface

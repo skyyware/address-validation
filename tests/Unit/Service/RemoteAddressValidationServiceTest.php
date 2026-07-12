@@ -133,9 +133,34 @@ final class RemoteAddressValidationServiceTest extends TestCase
             self::assertSame($propertyPath, $violation->getPropertyPath());
             self::assertSame('SKYY_ADDRESS_NOT_VERIFIED', $violation->getCode());
             self::assertSame(
+                'VIOLATION::SKYY_ADDRESS_NOT_VERIFIED_SUGGESTION',
+                $violation->getMessageTemplate(),
+            );
+            self::assertSame(
                 'Königstraße 12, 70173 Stuttgart, DE',
                 $violation->getParameters()['{{ suggestion }}'] ?? null,
             );
+        }
+    }
+
+    public function testRejectedAddressWithoutSuggestionUsesTheGeneralMessage(): void
+    {
+        $provider = new ServiceTestProvider(ProviderResult::rejected(null));
+        $output = $this->addressOutput();
+        $service = $this->service($provider, $this->countryRepository('DE'));
+
+        try {
+            $service->validateAndNormalize(
+                new DataBag($output),
+                $output,
+                Context::createDefaultContext(),
+                'street',
+            );
+            self::fail('Expected an address constraint violation.');
+        } catch (ConstraintViolationException $exception) {
+            $violation = $exception->getViolations()->get(0);
+            self::assertSame('VIOLATION::SKYY_ADDRESS_NOT_VERIFIED', $violation->getMessageTemplate());
+            self::assertSame([], $violation->getParameters());
         }
     }
 
@@ -187,9 +212,9 @@ final class RemoteAddressValidationServiceTest extends TestCase
      */
     public static function propertyPathProvider(): iterable
     {
-        yield 'standalone address' => ['street'];
-        yield 'billing address' => ['billingAddress.street'];
-        yield 'shipping address' => ['shippingAddress.street'];
+        yield 'standalone address' => ['/street'];
+        yield 'billing address' => ['/billingAddress/street'];
+        yield 'shipping address' => ['/shippingAddress/street'];
     }
 
     /** @param EntityRepository<CountryCollection> $repository */

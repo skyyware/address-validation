@@ -50,17 +50,17 @@ final readonly class AddressValidationSubscriber implements EventSubscriberInter
 
     public function onBillingAddressMapped(DataMappingEvent $event): void
     {
-        $this->mapAddress($event, 'billingAddress.street');
+        $this->mapAddress($event, '/billingAddress/street');
     }
 
     public function onShippingAddressMapped(DataMappingEvent $event): void
     {
-        $this->mapAddress($event, 'shippingAddress.street');
+        $this->mapAddress($event, '/shippingAddress/street');
     }
 
     public function onAddressMapped(DataMappingEvent $event): void
     {
-        $this->mapAddress($event, 'street');
+        $this->mapAddress($event, '/street');
     }
 
     private function mapAddress(DataMappingEvent $event, string $propertyPath): void

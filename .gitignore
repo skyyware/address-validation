@@ -1,7 +1,11 @@
 /.php-cs-fixer.cache
 /.phpstan-cache/
 /.phpunit.cache/
+/.superpowers/
+/build/
 /composer.lock
+/reports/
+/scratch/
 /vendor/
 
 .DS_Store

@@ -74,16 +74,16 @@ final class AddressValidationSubscriberTest extends TestCase
 
         $billing = new DataMappingEvent(new DataBag(['street' => 'one']), ['street' => 'one'], $context);
         $subscriber->onBillingAddressMapped($billing);
-        self::assertSame('billingAddress.street', $remote->paths[0]);
+        self::assertSame('/billingAddress/street', $remote->paths[0]);
         self::assertSame('normalized', $billing->getOutput()['street']);
 
         $shipping = new DataMappingEvent(new DataBag(['street' => 'two']), ['street' => 'two'], $context);
         $subscriber->onShippingAddressMapped($shipping);
-        self::assertSame('shippingAddress.street', $remote->paths[1]);
+        self::assertSame('/shippingAddress/street', $remote->paths[1]);
 
         $address = new DataMappingEvent(new DataBag(['street' => 'three']), ['street' => 'three'], $context);
         $subscriber->onAddressMapped($address);
-        self::assertSame('street', $remote->paths[2]);
+        self::assertSame('/street', $remote->paths[2]);
     }
 
     private function config(

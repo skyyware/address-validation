@@ -105,7 +105,9 @@ class RemoteAddressValidationService
         string $propertyPath,
     ): never {
         $parameters = [];
+        $messageTemplate = 'VIOLATION::SKYY_ADDRESS_NOT_VERIFIED';
         if ($suggestion !== null) {
+            $messageTemplate = 'VIOLATION::SKYY_ADDRESS_NOT_VERIFIED_SUGGESTION';
             $parameters['{{ suggestion }}'] = \sprintf(
                 '%s, %s %s, %s',
                 $suggestion->street,
@@ -116,8 +118,8 @@ class RemoteAddressValidationService
         }
 
         $violation = new ConstraintViolation(
-            'VIOLATION::SKYY_ADDRESS_NOT_VERIFIED',
-            'VIOLATION::SKYY_ADDRESS_NOT_VERIFIED',
+            $messageTemplate,
+            $messageTemplate,
             $parameters,
             $input->all(),
             $propertyPath,

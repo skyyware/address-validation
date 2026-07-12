@@ -221,6 +221,7 @@ final class PluginMetadataTest extends TestCase
             'VIOLATION::SKYY_PHONE_CHARACTERS',
             'VIOLATION::SKYY_POSTAL_CHARACTERS',
             'VIOLATION::SKYY_ADDRESS_NOT_VERIFIED',
+            'VIOLATION::SKYY_ADDRESS_NOT_VERIFIED_SUGGESTION',
         ];
 
         foreach ([
@@ -228,8 +229,10 @@ final class PluginMetadataTest extends TestCase
             self::ROOT . '/src/Resources/snippet/en_GB/storefront.en-GB.json',
         ] as $snippetPath) {
             $snippets = $this->decodeJsonFile($snippetPath);
-            self::assertSame($expectedKeys, array_keys($snippets));
-            foreach ($snippets as $message) {
+            self::assertSame(['error'], array_keys($snippets));
+            self::assertIsArray($snippets['error']);
+            self::assertSame($expectedKeys, array_keys($snippets['error']));
+            foreach ($snippets['error'] as $message) {
                 self::assertIsString($message);
                 self::assertNotSame('', trim($message));
             }

@@ -40,7 +40,8 @@
       <argument type="service" id="logger"/>
     </service>
 
-    <service id="Skyyware\SkyyAddressValidation\Subscriber\AddressValidationSubscriber">
+    <service id="Skyyware\SkyyAddressValidation\Subscriber\AddressValidationSubscriber"
+             autoconfigure="false">
       <argument type="service" id="Skyyware\SkyyAddressValidation\Config\AddressValidationConfig"/>
       <argument type="service" id="Skyyware\SkyyAddressValidation\Service\RemoteAddressValidationService"/>
       <tag name="kernel.event_subscriber"/>

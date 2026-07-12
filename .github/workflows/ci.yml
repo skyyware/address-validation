@@ -63,11 +63,14 @@ jobs:
           SHOPWARE_VERSION: ${{ matrix.shopware }}
           DEPENDENCIES: ${{ matrix.dependencies }}
         run: |
-          flags=(--no-interaction --no-progress --with-all-dependencies)
+          flags=(--no-interaction --no-progress)
           if [[ "$DEPENDENCIES" == "lowest" ]]; then
             flags+=(--prefer-lowest)
           fi
-          composer update "shopware/core:$SHOPWARE_VERSION" "shopware/storefront:$SHOPWARE_VERSION" "${flags[@]}"
+          composer update \
+            --with "shopware/core:$SHOPWARE_VERSION" \
+            --with "shopware/storefront:$SHOPWARE_VERSION" \
+            "${flags[@]}"
 
       - name: Run unit and release gates
         run: bin/check

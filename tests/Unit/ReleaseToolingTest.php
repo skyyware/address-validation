@@ -57,6 +57,8 @@ final class ReleaseToolingTest extends TestCase
             'tools: composer:v2, phpunit:11',
             'SKYY_PHPUNIT_BINARY="$(command -v phpunit)"',
             'COMPOSER_HOME="$RUNNER_TEMP/shopware-composer-home"',
+            '--with "shopware/core:$SHOPWARE_VERSION"',
+            '--with "shopware/storefront:$SHOPWARE_VERSION"',
             'bin/integration',
         ] as $requiredText) {
             self::assertStringContainsString($requiredText, $workflow);

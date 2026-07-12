@@ -86,14 +86,15 @@ final class PluginBootTest extends TestCase
 
         $dispatcher->dispatch($event, $event->getName());
 
-        self::assertCount(1, $definition->getProperty('firstName'));
-        self::assertCount(1, $definition->getProperty('lastName'));
-        self::assertCount(1, $definition->getProperty('phoneNumber'));
-        self::assertCount(1, $definition->getProperty('zipcode'));
-        self::assertContainsOnlyInstancesOf(NoDigitsInName::class, $definition->getProperty('firstName'));
-        self::assertContainsOnlyInstancesOf(NoDigitsInName::class, $definition->getProperty('lastName'));
-        self::assertContainsOnlyInstancesOf(PhoneCharacters::class, $definition->getProperty('phoneNumber'));
-        self::assertContainsOnlyInstancesOf(PostalCodeCharacters::class, $definition->getProperty('zipcode'));
+        $properties = $definition->getProperties();
+        self::assertCount(1, $properties['firstName']);
+        self::assertCount(1, $properties['lastName']);
+        self::assertCount(1, $properties['phoneNumber']);
+        self::assertCount(1, $properties['zipcode']);
+        self::assertContainsOnlyInstancesOf(NoDigitsInName::class, $properties['firstName']);
+        self::assertContainsOnlyInstancesOf(NoDigitsInName::class, $properties['lastName']);
+        self::assertContainsOnlyInstancesOf(PhoneCharacters::class, $properties['phoneNumber']);
+        self::assertContainsOnlyInstancesOf(PostalCodeCharacters::class, $properties['zipcode']);
     }
 
     public function testStorefrontViolationSnippetsLoadAndInterpolate(): void

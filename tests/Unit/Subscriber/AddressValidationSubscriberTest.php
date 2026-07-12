@@ -43,10 +43,11 @@ final class AddressValidationSubscriberTest extends TestCase
 
         $subscriber->onBuildAddressValidation($event);
 
-        self::assertContainsOnlyInstancesOf(NoDigitsInName::class, $definition->getProperty('firstName'));
-        self::assertContainsOnlyInstancesOf(NoDigitsInName::class, $definition->getProperty('lastName'));
-        self::assertContainsOnlyInstancesOf(PhoneCharacters::class, $definition->getProperty('phoneNumber'));
-        self::assertContainsOnlyInstancesOf(PostalCodeCharacters::class, $definition->getProperty('zipcode'));
+        $properties = $definition->getProperties();
+        self::assertContainsOnlyInstancesOf(NoDigitsInName::class, $properties['firstName']);
+        self::assertContainsOnlyInstancesOf(NoDigitsInName::class, $properties['lastName']);
+        self::assertContainsOnlyInstancesOf(PhoneCharacters::class, $properties['phoneNumber']);
+        self::assertContainsOnlyInstancesOf(PostalCodeCharacters::class, $properties['zipcode']);
     }
 
     public function testDisabledLocalRulesAddNothing(): void

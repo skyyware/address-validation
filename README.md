@@ -80,13 +80,6 @@ Configuration is available in the Shopware Administration under Extensions.
 Keep remote verification off until all provider and privacy requirements have
 been reviewed.
 
-Until the package is listed on Packagist, add its public repository before
-running `composer require`:
-
-```bash
-composer config repositories.skyy-address-validation vcs https://github.com/skyyware/address-validation
-```
-
 ## Uninstall
 
 Uninstalling removes the plugin settings. It does not undo addresses previously

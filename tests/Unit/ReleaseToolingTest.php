@@ -16,10 +16,29 @@ final class ReleaseToolingTest extends TestCase
         $this->projectRoot = \dirname(__DIR__, 2);
     }
 
+    public function testComposerAllowsOnlyTheCurrentShopwareReleaseLine(): void
+    {
+        $metadata = json_decode(
+            (string) file_get_contents($this->projectRoot . '/composer.json'),
+            true,
+            512,
+            JSON_THROW_ON_ERROR,
+        );
+
+        foreach ($metadata['require'] as $package => $constraint) {
+            if (!str_starts_with($package, 'shopware/')) {
+                continue;
+            }
+
+            self::assertTrue(\Composer\Semver\Semver::satisfies('6.7.15.0', $constraint));
+            self::assertFalse(\Composer\Semver\Semver::satisfies('6.6.10.27', $constraint));
+            self::assertFalse(\Composer\Semver\Semver::satisfies('6.8.0.0', $constraint));
+        }
+    }
+
     public function testReleaseEntrypointsExistAndScriptsAreExecutable(): void
     {
         foreach ([
-            '.github/workflows/ci.yml',
             'bin/check',
             'bin/integration',
             'bin/package',
@@ -33,39 +52,6 @@ final class ReleaseToolingTest extends TestCase
             self::assertFileIsReadable($this->projectRoot . '/' . $path);
             self::assertTrue(is_executable($this->projectRoot . '/' . $path));
         }
-    }
-
-    public function testCiPinsActionsAndTestsRealShopwareInBothCompatibilityLanes(): void
-    {
-        $workflow = $this->read('.github/workflows/ci.yml');
-        preg_match_all('/^\s*-\s+uses:\s+[^@\s]+@([^\s#]+)/m', $workflow, $matches);
-
-        self::assertNotEmpty($matches[1]);
-        foreach ($matches[1] as $reference) {
-            self::assertMatchesRegularExpression('/^[0-9a-f]{40}$/', $reference);
-        }
-
-        foreach ([
-            'shopware: "~6.6.0"',
-            'shopware: "~6.7.0"',
-            'integration_shopware: "6.6.0.0"',
-            'expected_core_version: "6.6.0.0"',
-            'allow_insecure_fixture: "1"',
-            'allow_insecure_fixture: "0"',
-            'flags+=(--prefer-lowest)',
-            'mariadb:',
-            'tools: composer:v2, phpunit:11',
-            'SKYY_PHPUNIT_BINARY="$(command -v phpunit)"',
-            'COMPOSER_HOME="$RUNNER_TEMP/shopware-composer-home"',
-            '--with "shopware/core:$SHOPWARE_VERSION"',
-            '--with "shopware/storefront:$SHOPWARE_VERSION"',
-            'bin/integration',
-        ] as $requiredText) {
-            self::assertStringContainsString($requiredText, $workflow);
-        }
-
-        self::assertStringNotContainsString('COMPOSER_NO_BLOCKING:', $workflow);
-        self::assertStringNotContainsString('composer --working-dir="$SHOPWARE_PROJECT_ROOT" require', $workflow);
     }
 
     public function testChecksAndPackagingEnforceADevelopmentFreeRuntimeArchive(): void
@@ -85,7 +71,7 @@ final class ReleaseToolingTest extends TestCase
         $package = $this->read('bin/package');
         foreach ([
             'PACKAGE_NAME=SkyyAddressValidation',
-            'VERSION=${VERSION:-0.1.0}',
+            'VERSION=${VERSION:-0.2.0}',
             'ARCHIVE="$BUILD_DIR/$PACKAGE_NAME-$VERSION.zip"',
             '*/tests/*',
             '*/vendor/*',
@@ -116,10 +102,10 @@ final class ReleaseToolingTest extends TestCase
         }
 
         $changelog = $this->read('CHANGELOG.md');
-        self::assertStringContainsString('## [0.1.0]', $changelog);
+        self::assertStringContainsString('## [0.2.0]', $changelog);
 
         $security = $this->read('SECURITY.md');
-        self::assertStringContainsString('0.1.x', $security);
+        self::assertStringContainsString('0.2.x', $security);
     }
 
     public function testPackagedComposerMetadataCarriesTheReleaseVersion(): void
@@ -131,14 +117,14 @@ final class ReleaseToolingTest extends TestCase
 
         $archive = new ZipArchive();
         self::assertTrue(
-            $archive->open($this->projectRoot . '/build/SkyyAddressValidation-0.1.0.zip') === true,
+            $archive->open($this->projectRoot . '/build/SkyyAddressValidation-0.2.0.zip') === true,
         );
         $composerJson = $archive->getFromName('SkyyAddressValidation/composer.json');
         $archive->close();
         self::assertIsString($composerJson);
 
         $metadata = json_decode($composerJson, true, 512, JSON_THROW_ON_ERROR);
-        self::assertSame('0.1.0', $metadata['version'] ?? null);
+        self::assertSame('0.2.0', $metadata['version'] ?? null);
     }
 
     public function testGeneratedReleaseAndScratchPathsAreIgnored(): void

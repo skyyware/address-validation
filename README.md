@@ -2,7 +2,13 @@
 
 SkyyAddressValidation is an MIT-licensed Shopware 6 plugin for international
 customer input checks and optional remote address verification. It supports
-Shopware 6.6 and 6.7 on PHP 8.2 or newer.
+Shopware 6.7 on PHP 8.2 or newer.
+
+## Compatibility
+
+New releases support the current stable Shopware major line only, currently
+6.7. Version `0.2.x` requires Shopware 6.7. Version `0.1.0` remains available
+for Shopware 6.6, but receives no further fixes. Existing tags are never changed.
 
 ## What It Checks
 
@@ -62,7 +68,7 @@ provider response bodies or cache values.
 Install the package with Composer:
 
 ```bash
-composer require skyyware/address-validation
+composer require skyyware/address-validation:^0.2
 bin/console plugin:refresh
 bin/console plugin:install --activate SkyyAddressValidation
 ```
@@ -74,6 +80,18 @@ Configuration is available in the Shopware Administration under Extensions.
 Keep remote verification off until all provider and privacy requirements have
 been reviewed.
 
+Until the package is listed on Packagist, add its public repository before
+running `composer require`:
+
+```bash
+composer config repositories.skyy-address-validation vcs https://github.com/skyyware/address-validation
+```
+
+## Uninstall
+
+Uninstalling removes the plugin settings. It does not undo addresses previously
+normalized through the optional provider.
+
 ## Development
 
 Install dependencies and run the complete local quality gate:
@@ -83,9 +101,9 @@ composer update --prefer-dist
 bin/check
 ```
 
-The CI matrix verifies the lowest supported Shopware 6.6 dependency set and the
-current Shopware 6.7 line. Real integration tests install the clean release ZIP
-into a disposable Shopware project before booting the container.
+Local release checks target the current stable Shopware 6.7 release on PHP 8.2
+and 8.4. Real integration tests install the clean release ZIP into a disposable
+Shopware project before booting the container. GitHub Actions is disabled.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidance and
 [SECURITY.md](SECURITY.md) for private vulnerability reporting.

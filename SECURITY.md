@@ -2,7 +2,8 @@
 
 ## Supported Versions
 
-Security fixes are provided for the latest `0.1.x` release.
+Security fixes are provided for the latest `0.2.x` release on Shopware 6.7.
+The `0.1.x` line is no longer maintained.
 
 ## Reporting A Vulnerability
 

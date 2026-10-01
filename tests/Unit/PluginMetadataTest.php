@@ -90,10 +90,10 @@ final class PluginMetadataTest extends TestCase
         self::assertSame('>=8.2', $composer['require']['php'] ?? null);
         self::assertSame('^3.0', $composer['require']['psr/cache'] ?? null);
         self::assertSame('^3.0', $composer['require']['psr/log'] ?? null);
-        self::assertSame('~6.6.0 || ~6.7.0', $composer['require']['shopware/core'] ?? null);
-        self::assertSame('~6.6.0 || ~6.7.0', $composer['require']['shopware/storefront'] ?? null);
-        self::assertSame('^6.4 || ^7.0', $composer['require']['symfony/http-client'] ?? null);
-        self::assertSame('^6.4 || ^7.0', $composer['require']['symfony/lock'] ?? null);
+        self::assertSame('~6.7.0', $composer['require']['shopware/core'] ?? null);
+        self::assertSame('~6.7.0', $composer['require']['shopware/storefront'] ?? null);
+        self::assertSame('^7.2', $composer['require']['symfony/http-client'] ?? null);
+        self::assertSame('^7.2', $composer['require']['symfony/lock'] ?? null);
         self::assertSame(
             'src/',
             $composer['autoload']['psr-4']['Skyyware\\SkyyAddressValidation\\'] ?? null,

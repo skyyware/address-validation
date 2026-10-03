@@ -1,6 +1,6 @@
-# SkyyAddressValidation
+# Address Validation
 
-SkyyAddressValidation is an MIT-licensed Shopware 6 plugin for international
+Address Validation is an MIT-licensed Shopware 6 plugin for international
 customer input checks and optional remote address verification. It supports
 Shopware 6.7 on PHP 8.2 or newer.
 
@@ -60,7 +60,7 @@ Review proxy and provider URL-log retention as part of that assessment.
 
 The configured user agent and contact address identify the merchant. The
 merchant is also responsible for any attribution the provider or underlying
-data license requires. SkyyAddressValidation never logs submitted addresses,
+data license requires. Address Validation never logs submitted addresses,
 provider response bodies or cache values.
 
 ## Installation
@@ -103,4 +103,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidance and
 
 ## License
 
-SkyyAddressValidation is released under the [MIT License](LICENSE).
+Address Validation is released under the [MIT License](LICENSE).

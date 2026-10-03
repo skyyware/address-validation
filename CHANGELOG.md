@@ -7,6 +7,11 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-03
+
+- Shorten the plugin title to Address Validation, or Adressvalidierung in German.
+- Keep the Composer package, plugin identifier and configuration keys unchanged.
+
 ## [0.2.0] - 2026-10-01
 
 - Support Shopware 6.7 only. Use `0.1.0` for existing Shopware 6.6 projects.

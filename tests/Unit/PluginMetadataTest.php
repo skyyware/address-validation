@@ -107,8 +107,8 @@ final class PluginMetadataTest extends TestCase
         );
         self::assertSame(
             [
-                'de-DE' => 'Skyy Adressvalidierung',
-                'en-GB' => 'Skyy Address Validation',
+                'de-DE' => 'Adressvalidierung',
+                'en-GB' => 'Address Validation',
             ],
             $extra['label'] ?? null,
         );

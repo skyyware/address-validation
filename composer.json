@@ -46,8 +46,8 @@
   "extra": {
     "shopware-plugin-class": "Skyyware\\SkyyAddressValidation\\SkyyAddressValidation",
     "label": {
-      "de-DE": "Skyy Adressvalidierung",
-      "en-GB": "Skyy Address Validation"
+      "de-DE": "Adressvalidierung",
+      "en-GB": "Address Validation"
     },
     "description": {
       "de-DE": "Serverseitige internationale Eingabe- und optionale Adressprüfung.",

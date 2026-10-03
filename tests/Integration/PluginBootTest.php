@@ -66,7 +66,7 @@ final class PluginBootTest extends TestCase
         )->first();
 
         self::assertNotNull($plugin);
-        self::assertSame(getenv('VERSION') ?: '0.2.0', $plugin->getVersion());
+        self::assertSame(getenv('VERSION') ?: '0.2.1', $plugin->getVersion());
     }
 
     public function testRemoteVerificationIsDisabledByDefault(): void

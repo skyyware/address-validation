@@ -71,7 +71,7 @@ final class ReleaseToolingTest extends TestCase
         $package = $this->read('bin/package');
         foreach ([
             'PACKAGE_NAME=SkyyAddressValidation',
-            'VERSION=${VERSION:-0.2.0}',
+            'VERSION=${VERSION:-0.2.1}',
             'ARCHIVE="$BUILD_DIR/$PACKAGE_NAME-$VERSION.zip"',
             '*/tests/*',
             '*/vendor/*',
@@ -102,7 +102,7 @@ final class ReleaseToolingTest extends TestCase
         }
 
         $changelog = $this->read('CHANGELOG.md');
-        self::assertStringContainsString('## [0.2.0]', $changelog);
+        self::assertStringContainsString('## [0.2.1]', $changelog);
 
         $security = $this->read('SECURITY.md');
         self::assertStringContainsString('0.2.x', $security);
@@ -117,14 +117,14 @@ final class ReleaseToolingTest extends TestCase
 
         $archive = new ZipArchive();
         self::assertTrue(
-            $archive->open($this->projectRoot . '/build/SkyyAddressValidation-0.2.0.zip') === true,
+            $archive->open($this->projectRoot . '/build/SkyyAddressValidation-0.2.1.zip') === true,
         );
         $composerJson = $archive->getFromName('SkyyAddressValidation/composer.json');
         $archive->close();
         self::assertIsString($composerJson);
 
         $metadata = json_decode($composerJson, true, 512, JSON_THROW_ON_ERROR);
-        self::assertSame('0.2.0', $metadata['version'] ?? null);
+        self::assertSame('0.2.1', $metadata['version'] ?? null);
     }
 
     public function testGeneratedReleaseAndScratchPathsAreIgnored(): void
